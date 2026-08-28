@@ -1,6 +1,6 @@
 #!/bin/bash
-echo "🛡️ Starting SOC Platform..."
-cd ~/Desktop/"Soc Lab"
+echo "🛡️ Starting SENTINELOPS..."
+cd ~/Desktop/"SENTINELOPS"
 source venv/bin/activate
 
 # Kill any existing processes
@@ -17,7 +17,7 @@ echo "✅ API started (PID: $!)"
 
 sleep 2
 echo ""
-echo "📊 SOC Platform is running!"
+echo "📊 SENTINELOPS is running!"
 echo "   API: http://localhost:8001"
 echo "   Health: http://localhost:8001/health"
 echo "   Dashboard: python dashboards/simple_dashboard.py"

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-echo "🛡️  Starting Enterprise SOC Platform..."
+echo "🛡️  Starting SENTINELOPS..."
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
@@ -80,7 +80,7 @@ fi
 
 echo ""
 echo "=========================================================="
-echo "🎯 ENTERPRISE SOC PLATFORM IS NOW RUNNING!"
+echo "🎯 SENTINELOPS IS NOW RUNNING!"
 echo "=========================================================="
 echo "   🌐 Web Dashboard:  http://localhost:8002"
 echo "   🌐 Network Access: http://${LOCAL_IP}:8002"

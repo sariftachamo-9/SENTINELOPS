@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-app = FastAPI(title="SentinelOps Web Portal")
+app = FastAPI(title="SENTINELOPS Web Portal")
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 STATIC_DIR = os.path.join(PROJECT_ROOT, "static")
@@ -24,7 +24,7 @@ def index():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SentinelOps // Security Operations</title>
+    <title>SENTINELOPS // Security Operations</title>
     <link rel="icon" type="image/png" href="/static/soc%20logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -548,7 +548,7 @@ def index():
             <div id="tab-health" class="tab-content">
                 <div class="table-card">
                     <div class="table-header">
-                        <h3>SOC Platform Infrastructure & Sensor Health Status</h3>
+                        <h3>SENTINELOPS Infrastructure & Sensor Health Status</h3>
                     </div>
                     <table>
                         <thead>

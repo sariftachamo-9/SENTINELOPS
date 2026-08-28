@@ -58,7 +58,7 @@ class ClassifyIOCRequest(BaseModel):
     reason: str
 
 app = FastAPI(
-    title="Enterprise SOC Laboratory REST API",
+    title="SENTINELOPS REST API",
     description="Modular API engine powering real-time security operations, telemetry ingestion, incident triage, threat hunting, and SOAR playbooks.",
     version="2.5.0"
 )
@@ -395,7 +395,7 @@ def require_permission(required_perm: str):
 @app.get("/")
 def read_root():
     return {
-        "service": "Enterprise SOC Platform API",
+        "service": "SENTINELOPS API",
         "status": "online",
         "version": "2.5.0",
         "documentation": "/docs"

@@ -1,7 +1,7 @@
 #!/bin/bash
-echo "👁️  Monitoring SOC Platform..."
+echo "👁️  Monitoring SENTINELOPS..."
 
-cd ~/Desktop/"Soc Lab"
+cd ~/Desktop/"SENTINELOPS"
 source venv/bin/activate
 
 while true; do

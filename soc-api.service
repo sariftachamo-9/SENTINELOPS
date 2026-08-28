@@ -1,13 +1,13 @@
 [Unit]
-Description=SOC API Service
+Description=SENTINELOPS API Service
 After=network.target
 
 [Service]
 Type=simple
 User=jenishkali
-WorkingDirectory=/home/jenishkali/Desktop/Soc Lab
-Environment="PATH=/home/jenishkali/Desktop/Soc Lab/venv/bin:/usr/local/bin:/usr/bin:/bin"
-ExecStart=/home/jenishkali/Desktop/Soc Lab/venv/bin/uvicorn src.api:app --host 0.0.0.0 --port 8001
+WorkingDirectory=/home/jenishkali/Desktop/SENTINELOPS
+Environment="PATH=/home/jenishkali/Desktop/SENTINELOPS/venv/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/home/jenishkali/Desktop/SENTINELOPS/venv/bin/uvicorn src.api:app --host 0.0.0.0 --port 8001
 ExecStop=/usr/bin/pkill -f "uvicorn src.api"
 Restart=always
 RestartSec=10

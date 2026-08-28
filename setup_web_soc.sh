@@ -1,7 +1,7 @@
 #!/bin/bash
-echo "🛡️ Setting up Enterprise SOC Web Platform..."
+echo "🛡️ Setting up SENTINELOPS web platform..."
 
-cd ~/Desktop/"Soc Lab"
+cd ~/Desktop/"SENTINELOPS"
 source venv/bin/activate
 
 # Install web dependencies
@@ -15,7 +15,7 @@ echo "🌐 Starting Web Dashboard on port 8002..."
 uvicorn src.web_ui:app --host 0.0.0.0 --port 8002 --reload &
 
 echo ""
-echo "✅ Enterprise SOC Web Platform is ready!"
+echo "✅ SENTINELOPS web platform is ready!"
 echo ""
 echo "Access your SOC Dashboard:"
 echo "   🌐 http://localhost:8002"

@@ -1,8 +1,8 @@
 #!/bin/bash
-echo "🛡️ Starting SOC Platform..."
+echo "🛡️ Starting SENTINELOPS..."
 
 # Go to project directory
-cd ~/Desktop/"Soc Lab"
+cd ~/Desktop/"SENTINELOPS"
 
 # Activate virtual environment
 source venv/bin/activate
@@ -25,7 +25,7 @@ API_PID=$!
 sleep 3
 
 echo ""
-echo "✅ SOC Platform is running!"
+echo "✅ SENTINELOPS is running!"
 echo "   📊 Main Platform PID: $MAIN_PID"
 echo "   🔗 API PID: $API_PID"
 echo "   🌐 API: http://localhost:8001"

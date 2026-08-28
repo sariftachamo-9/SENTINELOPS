@@ -23,7 +23,7 @@ class SOCPlatform:
         
     async def start(self):
         logger.info("=" * 60)
-        logger.info("🛡️ SOC Platform Starting...")
+        logger.info("🛡️ SENTINELOPS Starting...")
         logger.info(f"Time: {datetime.now().isoformat()}")
         logger.info("=" * 60)
         
@@ -74,7 +74,7 @@ class SOCPlatform:
             self.collected_data.append(event)
     
     async def shutdown(self):
-        logger.info("Shutting down SOC Platform...")
+        logger.info("Shutting down SENTINELOPS...")
         self.is_running = False
         logger.info(f"Final stats - Events: {self.events_processed}, Alerts: {self.alerts_generated}, Incidents: {self.incidents_created}")
         logger.info("Goodbye!")

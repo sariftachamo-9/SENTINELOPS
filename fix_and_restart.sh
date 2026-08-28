@@ -1,7 +1,7 @@
 #!/bin/bash
-echo "🔄 Fixing SOC Platform..."
+echo "🔄 Fixing SENTINELOPS..."
 
-cd ~/Desktop/"Soc Lab"
+cd ~/Desktop/"SENTINELOPS"
 source venv/bin/activate
 
 # Stop everything

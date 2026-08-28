@@ -3,7 +3,7 @@ import json
 import time
 
 print("=" * 60)
-print("SOC Platform API Test")
+print("SENTINELOPS API Test")
 print("=" * 60)
 
 BASE_URL = "http://localhost:8001"

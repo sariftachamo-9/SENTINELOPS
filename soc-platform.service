@@ -1,13 +1,13 @@
 [Unit]
-Description=SOC Platform Service
+Description=SENTINELOPS Platform Service
 After=network.target
 
 [Service]
 Type=simple
 User=jenishkali
-WorkingDirectory=/home/jenishkali/Desktop/Soc Lab
-Environment="PATH=/home/jenishkali/Desktop/Soc Lab/venv/bin:/usr/local/bin:/usr/bin:/bin"
-ExecStart=/home/jenishkali/Desktop/Soc Lab/venv/bin/python /home/jenishkali/Desktop/Soc Lab/src/main.py
+WorkingDirectory=/home/jenishkali/Desktop/SENTINELOPS
+Environment="PATH=/home/jenishkali/Desktop/SENTINELOPS/venv/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/home/jenishkali/Desktop/SENTINELOPS/venv/bin/python /home/jenishkali/Desktop/SENTINELOPS/src/main.py
 ExecStop=/usr/bin/pkill -f "python src/main.py"
 Restart=always
 RestartSec=10
