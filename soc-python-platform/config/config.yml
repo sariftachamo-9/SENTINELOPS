@@ -1,0 +1,150 @@
+# Main Configuration File
+soc:
+  name: "Enterprise SOC Platform"
+  version: "1.0.0"
+  environment: "production"  # development, staging, production
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "json"
+  file: "logs/soc_platform.log"
+  max_size: "100MB"
+  backup_count: 10
+
+# Elasticsearch Configuration
+elasticsearch:
+  hosts:
+    - "localhost:9200"
+    - "elasticsearch1:9200"
+    - "elasticsearch2:9200"
+  username: "elastic"
+  password: "${ELASTIC_PASSWORD}"  # Set in environment
+  index_prefix: "soc"
+  bulk_size: 1000
+
+# Kafka Configuration
+kafka:
+  bootstrap_servers: "localhost:9092"
+  topic: "soc-events"
+  group_id: "soc-platform"
+  partitions: 6
+  replication_factor: 2
+
+# Redis Configuration
+redis:
+  url: "redis://localhost:6379/0"
+  password: "${REDIS_PASSWORD}"
+  max_connections: 50
+
+# Collection Configuration
+collection:
+  interval: 5  # seconds
+  batch_size: 1000
+  sources:
+    - network
+    - system
+    - application
+    - threat_intel
+
+# Network Collection
+network:
+  interface: "eth0"  # Change to your network interface
+  buffer_size: 10000
+  sampling_rate: 0.8
+  capture_timeout: 5
+
+# Security Rules
+rules:
+  detection: "config/rules/detection_rules.json"
+  correlation: "config/rules/correlation_rules.json"
+  ml: "config/rules/ml_rules.json"
+
+# Alert Configuration
+alert:
+  threshold: 60
+  anomaly_threshold: 0.7
+  notification_channels:
+    - slack
+    - email
+    - pagerduty
+
+# Incident Response
+incident:
+  critical_threshold: 80
+  auto_response: true
+  playbooks_dir: "config/playbooks/"
+
+# Integrations
+integrations:
+  slack:
+    enabled: true
+    webhook_url: "${SLACK_WEBHOOK_URL}"
+    channel: "#soc-alerts"
+  
+  email:
+    enabled: true
+    smtp_server: "smtp.company.com"
+    smtp_port: 587
+    username: "${EMAIL_USERNAME}"
+    password: "${EMAIL_PASSWORD}"
+    recipients:
+      - "soc@company.com"
+  
+  pagerduty:
+    enabled: false
+    api_key: "${PAGERDUTY_API_KEY}"
+    service_id: "${PAGERDUTY_SERVICE_ID}"
+
+# Threat Intelligence
+threat_intel:
+  feeds:
+    - name: "AlienVault OTX"
+      url: "https://otx.alienvault.com/api/v1/pulses/subscribed"
+      type: "json"
+      update_interval: 3600
+    
+    - name: "AbuseIPDB"
+      url: "https://api.abuseipdb.com/api/v2/blacklist"
+      type: "json"
+      update_interval: 3600
+  
+  cache_ttl: 3600  # seconds
+  enrichment_enabled: true
+
+# ML Models
+ml:
+  models_dir: "ml_models/"
+  anomaly_detection_model: "anomaly_detection.pkl"
+  threat_classifier: "threat_classifier.pkl"
+  correlation_model: "correlation_model.pkl"
+  update_interval: 86400  # 24 hours
+
+# Database
+database:
+  sqlite: "soc_data.db"
+  connection_pool: 10
+
+# API
+api:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8000
+  auth_required: true
+  api_key: "${API_KEY}"
+
+# Monitoring
+monitoring:
+  prometheus:
+    enabled: true
+    port: 9090
+  grafana:
+    enabled: true
+    port: 3000
+
+# Backup
+backup:
+  enabled: true
+  interval: 86400  # 24 hours
+  retention_days: 30
+  destination: "/backup/soc/"

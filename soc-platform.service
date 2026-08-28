@@ -1,0 +1,16 @@
+[Unit]
+Description=SOC Platform Service
+After=network.target
+
+[Service]
+Type=simple
+User=jenishkali
+WorkingDirectory=/home/jenishkali/Desktop/Soc Lab
+Environment="PATH=/home/jenishkali/Desktop/Soc Lab/venv/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/home/jenishkali/Desktop/Soc Lab/venv/bin/python /home/jenishkali/Desktop/Soc Lab/src/main.py
+ExecStop=/usr/bin/pkill -f "python src/main.py"
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

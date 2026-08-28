@@ -1,0 +1,197 @@
+version: '3.8'
+
+services:
+  # Elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - soc-network
+
+  # Kibana
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${ENCRYPTION_KEY}
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - soc-network
+
+  # Redis
+  redis:
+    image: redis:7.0-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    networks:
+      - soc-network
+
+  # Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - soc-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    networks:
+      - soc-network
+
+  # PostgreSQL (for TheHive and Cortex)
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    environment:
+      POSTGRES_USER: thehive
+      POSTGRES_PASSWORD: thehive_password
+      POSTGRES_DB: thehive
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - soc-network
+
+  # TheHive (Incident Response)
+  thehive:
+    image: strangebee/thehive:5.2.0
+    container_name: thehive
+    depends_on:
+      - elasticsearch
+      - postgres
+    environment:
+      - JAVA_OPTS=-Xms2g -Xmx2g
+      - THEHIVE_ES_HOSTS=elasticsearch:9200
+      - THEHIVE_ES_USERNAME=elastic
+      - THEHIVE_ES_PASSWORD=${ELASTIC_PASSWORD}
+      - THEHIVE_DB_URL=jdbc:postgresql://postgres:5432/thehive
+      - THEHIVE_DB_USER=thehive
+      - THEHIVE_DB_PASSWORD=thehive_password
+    ports:
+      - "9000:9000"
+    volumes:
+      - thehive_data:/var/lib/thehive
+    networks:
+      - soc-network
+
+  # Cortex (Threat Intelligence)
+  cortex:
+    image: strangebee/cortex:3.1.0
+    container_name: cortex
+    depends_on:
+      - elasticsearch
+    environment:
+      - JAVA_OPTS=-Xms2g -Xmx2g
+      - CORTEX_ES_HOSTS=elasticsearch:9200
+      - CORTEX_ES_USERNAME=elastic
+      - CORTEX_ES_PASSWORD=${ELASTIC_PASSWORD}
+    ports:
+      - "9001:9001"
+    volumes:
+      - cortex_data:/var/lib/cortex
+    networks:
+      - soc-network
+
+  # MISP (Threat Intelligence Platform)
+  misp:
+    image: harvarditsecurity/misp:latest
+    container_name: misp
+    environment:
+      - MISP_HOSTNAME=${MISP_HOSTNAME}
+      - MISP_ADMIN_EMAIL=${MISP_ADMIN_EMAIL}
+      - MISP_ADMIN_PASSWD=${MISP_ADMIN_PASSWD}
+      - MISP_DB_HOST=misp-db
+      - MISP_DB_USER=misp
+      - MISP_DB_PASSWORD=${MISP_DB_PASSWORD}
+      - MISP_DB_NAME=misp
+      - REDIS_HOST=misp-redis
+    ports:
+      - "8080:80"
+      - "8443:443"
+    volumes:
+      - misp_data:/var/www/MISP/app/webroot/
+    depends_on:
+      - misp-db
+      - misp-redis
+    networks:
+      - soc-network
+
+  misp-db:
+    image: mysql:8.0
+    container_name: misp-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=misp
+      - MYSQL_USER=misp
+      - MYSQL_PASSWORD=${MISP_DB_PASSWORD}
+    volumes:
+      - misp_db_data:/var/lib/mysql
+    networks:
+      - soc-network
+
+  misp-redis:
+    image: redis:7.0
+    container_name: misp-redis
+    networks:
+      - soc-network
+
+  # Grafana
+  grafana:
+    image: grafana/grafana-enterprise:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-worldmap-panel
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - soc-network
+
+volumes:
+  es_data:
+  redis_data:
+  postgres_data:
+  thehive_data:
+  cortex_data:
+  misp_data:
+  misp_db_data:
+  grafana_data:
+
+networks:
+  soc-network:
+    driver: bridge

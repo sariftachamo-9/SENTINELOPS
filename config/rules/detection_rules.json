@@ -1,0 +1,51 @@
+{
+  "rules": [
+    {
+      "id": "DET-001",
+      "name": "Suspicious Port Scan",
+      "severity": "medium",
+      "type": "threshold",
+      "condition": {
+        "field": "dst_port",
+        "unique_count": 10,
+        "time_window": 60
+      },
+      "response": {
+        "action": "alert",
+        "notify": true
+      }
+    },
+    {
+      "id": "DET-002",
+      "name": "Possible Data Exfiltration",
+      "severity": "high",
+      "type": "threshold",
+      "condition": {
+        "field": "size",
+        "sum": 1000000,
+        "time_window": 300
+      },
+      "response": {
+        "action": "isolate",
+        "notify": true
+      }
+    },
+    {
+      "id": "DET-003",
+      "name": "Brute Force Attempt",
+      "severity": "high",
+      "type": "threshold",
+      "condition": {
+        "field": "src_ip",
+        "count": 10,
+        "time_window": 60,
+        "pattern": "failed_login"
+      },
+      "response": {
+        "action": "block_ip",
+        "duration": "1h",
+        "notify": true
+      }
+    }
+  ]
+}
